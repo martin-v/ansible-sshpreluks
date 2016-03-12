@@ -1,2 +1,11 @@
 ---
-# defaults file for sshpreluks
+
+# See README.md for details. Commented out to enforce mandatory variable!
+#sshpreluks_pubkeys:
+
+# See README.md for details. Commented out to enforce mandatory variable!
+#sshpreluks_network_config:
+
+
+# See README.md for details.
+sshpreluks_network_device: eth0

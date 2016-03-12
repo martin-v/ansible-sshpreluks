@@ -1,2 +1,51 @@
 ---
-# tasks file for sshpreluks
+
+
+- name: Install packages
+  notify:
+  - Update initramfs
+  package:
+      name: "{{ item }}"
+      state: present
+  tags: [ packages ]
+  with_items:
+  - dropbear
+  - initramfs-tools
+  - cryptsetup
+
+
+- name: Get network driver
+  action: shell grep DRIVER /sys/class/net/{{ sshpreluks_network_device }}/device/uevent | sed -e 's/^DRIVER=//'
+  register: net_driver
+  changed_when: false
+
+- debug: msg="Network driver = {{ net_driver.stdout_lines[0] }}"
+  when: "net_driver.stdout_lines is defined"
+
+
+- name: Add network driver to initramfs modules
+  lineinfile:
+    dest: /etc/initramfs-tools/modules
+    line: "{{ net_driver.stdout_lines[0] }}"
+  notify:
+  - Update initramfs
+  when: "net_driver.stdout_lines is defined"
+
+
+- name: Configure network for initramfs
+  copy:
+    content: "DEVICE={{ sshpreluks_network_device }}\nIP={{ sshpreluks_network_config | mandatory }}\n"
+    dest: /etc/initramfs-tools/conf.d/network.conf
+    force: yes
+  notify:
+  - Update initramfs
+
+
+- name: Deploy SSH keys in initramfs
+  authorized_key:
+    user: root
+    path: /etc/initramfs-tools/root/.ssh/authorized_keys
+    key: "{{ item.value | join('\n') }}"
+  with_dict: "{{ sshpreluks_pubkeys | mandatory }}"
+  notify:
+  - Update initramfs

@@ -1,2 +1,5 @@
 ---
-# handlers file for sshpreluks
+
+- name: Update initramfs
+  command: update-initramfs -u
+
