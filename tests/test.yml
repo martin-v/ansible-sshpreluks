@@ -1,5 +1,20 @@
 ---
 
+- hosts: all
+  tasks:
+    - name: Install etckeeper
+      package: name=etckeeper state=present
+
+    - name: Init etckeeper
+      shell: etckeeper init
+      args:
+        creates: /etc/.git/index
+
+    - set_fact:
+        revision: "{{ lookup('pipe', 'cd \"%s\" ; git rev-parse HEAD' % playbook_dir) }}"
+
+    - etckeeper: "action=commit msg='ansible: initial commit' rev={{ revision }}"
+
 
 - hosts: all
   remote_user: root

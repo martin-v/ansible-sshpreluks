@@ -1,5 +1,7 @@
 ---
 
+- etckeeper: action=begin
+
 
 - name: Install packages
   notify:
@@ -49,3 +51,6 @@
   with_dict: "{{ sshpreluks_pubkeys | mandatory }}"
   notify:
   - Update initramfs
+
+
+- etckeeper: "action=commit msg='ansible: {{ vars['role_name'] }}.main' rev={{ revision }}"
