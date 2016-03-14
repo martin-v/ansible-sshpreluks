@@ -120,6 +120,8 @@ Example variables file
 Open tasks
 ----------
 
+[![Build Status travis](https://travis-ci.org/martin-v/ansible-sshpreluks.svg?branch=master)](https://travis-ci.org/martin-v/ansible-sshpreluks)
+
 0. Find solution for automatic functional tests and implement it
 0. Test on other debian based systems
 
