@@ -79,9 +79,9 @@ To unlock a remote server you can use for example on your local machine the foll
 
 	function sshpreluks() {
 		HOSTNAME=$1
-		ssh -o "UserKnownHostsFile=~/.ssh/known_hosts.initramfs" \
+		ssh -t -o "UserKnownHostsFile=~/.ssh/known_hosts.initramfs" \
 			root@$HOSTNAME \
-			"/lib/cryptsetup/askpass \"Enter luks password for $HOSTNAME:\" > /lib/cryptsetup/passfifo"
+			"/lib/cryptsetup/askpass \"Enter luks password for $HOSTNAME: \" > /lib/cryptsetup/passfifo"
 	}
 
 
